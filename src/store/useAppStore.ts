@@ -9,6 +9,9 @@ interface AppState {
   setScrollProgress: (progress: number) => void
   hoveredPlanet: string | null
   setHoveredPlanet: (id: string | null) => void
+  scrollToTarget: number | null
+  requestScrollTo: (progress: number) => void
+  clearScrollTarget: () => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -18,4 +21,7 @@ export const useAppStore = create<AppState>((set) => ({
   setScrollProgress: (progress) => set({ scrollProgress: progress }),
   hoveredPlanet: null,
   setHoveredPlanet: (id) => set({ hoveredPlanet: id }),
+  scrollToTarget: null,
+  requestScrollTo: (progress) => set({ scrollToTarget: progress }),
+  clearScrollTarget: () => set({ scrollToTarget: null }),
 }))
