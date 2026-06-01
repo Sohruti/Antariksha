@@ -23,11 +23,9 @@ function ParallaxSection({
 
 function InfoCard({
   info,
-  index,
   isActive,
 }: {
   info: (typeof SECTION_INFO)[0]
-  index: number
   isActive: boolean
 }) {
   return (
@@ -219,7 +217,7 @@ export default function ScrollSections() {
 
       {SECTION_INFO.map((info, i) => (
         <ParallaxSection key={info.id} index={i}>
-          {sectionIndex === i && <InfoCard info={info} index={i} isActive={true} />}
+          {sectionIndex === i && <InfoCard info={info} isActive={true} />}
           {showSatellites && sectionIndex === i && <SatelliteNameList />}
           {currentBodyId && sectionIndex === i && (
             <PlanetInfoSidebar bodyId={currentBodyId} />

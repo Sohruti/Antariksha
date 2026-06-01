@@ -7,6 +7,24 @@ export interface CelestialData {
   info: string
   details: string[]
   satellites?: { name: string; type: string }[]
+  texture?: string
+  rotationSpeed?: number
+  hasClouds?: boolean
+  stormSpot?: boolean
+  atmosphere?: {
+    color: string
+    scale: number
+    intensity: number
+  }
+  ring?: {
+    innerRadius: number
+    outerRadius: number
+    color: string
+    opacity: number
+    tilt: number
+  }
+  emissive?: string
+  emissiveIntensity?: number
 }
 
 export const SATELLITES = [
@@ -27,6 +45,10 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#4B7BE5',
     size: 1,
     x: 60,
+    rotationSpeed: 0.4,
+    texture: '/textures/earth.png',
+    hasClouds: true,
+    atmosphere: { color: '#87CEEB', scale: 1.18, intensity: 0.9 },
     info: 'Our Home Planet — the third rock from the Sun',
     details: [
       'Diameter: 12,742 km',
@@ -43,6 +65,9 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#FDB813',
     size: 3.5,
     x: 0,
+    rotationSpeed: 0.04,
+    emissive: '#FFB347',
+    emissiveIntensity: 1.0,
     info: 'The Star at the Center of Our Solar System',
     details: [
       'Diameter: 1,391,000 km (109x Earth)',
@@ -58,6 +83,8 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#B5B5B5',
     size: 0.38,
     x: 28,
+    rotationSpeed: 0.08,
+    texture: '/textures/mercury.png',
     info: 'The Smallest Planet & Closest to the Sun',
     details: [
       'Diameter: 4,879 km',
@@ -73,7 +100,10 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#E8D5A3',
     size: 0.95,
     x: 42,
-    info: 'Earth\'s Twin — The Hottest Planet',
+    rotationSpeed: -0.06,
+    texture: '/textures/venus.png',
+    atmosphere: { color: '#FFD7A0', scale: 1.14, intensity: 1.1 },
+    info: "Earth's Twin — The Hottest Planet",
     details: [
       'Diameter: 12,104 km',
       'Orbit: 225 Earth days',
@@ -88,6 +118,9 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#E27B58',
     size: 0.53,
     x: 80,
+    rotationSpeed: 0.38,
+    texture: '/textures/mars.png',
+    atmosphere: { color: '#FFB088', scale: 1.08, intensity: 0.4 },
     info: 'The Red Planet — Our Next Frontier',
     details: [
       'Diameter: 6,779 km',
@@ -107,6 +140,10 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#C8A06E',
     size: 2.5,
     x: 105,
+    rotationSpeed: 1.0,
+    texture: '/textures/jupiter.png',
+    stormSpot: true,
+    atmosphere: { color: '#E8C68E', scale: 1.06, intensity: 0.5 },
     info: 'The Giant of the Solar System',
     details: [
       'Diameter: 139,820 km (11x Earth)',
@@ -128,6 +165,16 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#EAD6B8',
     size: 2,
     x: 135,
+    rotationSpeed: 0.9,
+    texture: '/textures/saturn.png',
+    atmosphere: { color: '#F5E6C8', scale: 1.05, intensity: 0.35 },
+    ring: {
+      innerRadius: 2.4,
+      outerRadius: 4.2,
+      color: '#D4B896',
+      opacity: 0.85,
+      tilt: 0.45,
+    },
     info: 'The Ringed Jewel of the Solar System',
     details: [
       'Diameter: 116,460 km (9.5x Earth)',
@@ -148,6 +195,9 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#7EC8E3',
     size: 1.2,
     x: 165,
+    rotationSpeed: 0.7,
+    texture: '/textures/uranus.png',
+    atmosphere: { color: '#A8E0F0', scale: 1.08, intensity: 0.5 },
     info: 'The Sideways Ice Giant',
     details: [
       'Diameter: 50,724 km (4x Earth)',
@@ -167,6 +217,9 @@ export const CELESTIAL_BODIES: CelestialData[] = [
     color: '#3B4CE8',
     size: 1.1,
     x: 195,
+    rotationSpeed: 0.75,
+    texture: '/textures/neptune.png',
+    atmosphere: { color: '#5577FF', scale: 1.08, intensity: 0.55 },
     info: 'The Windiest Planet at the Edge',
     details: [
       'Diameter: 49,244 km (3.9x Earth)',
@@ -196,7 +249,7 @@ export const SECTION_INFO = [
   {
     id: 'earth-satellites',
     title: 'The Satellite Network',
-    subtitle: 'Humanity\'s Eyes & Ears in Space',
+    subtitle: "Humanity's Eyes & Ears in Space",
     lines: [
       'From weather monitoring to global communications — satellites connect our world.',
       'The Hubble Space Telescope has transformed our understanding of the universe.',
@@ -210,7 +263,7 @@ export const SECTION_INFO = [
     lines: [
       'A massive fusion reactor 109 times wider than Earth.',
       'Every second, 600 million tons of hydrogen fuse into helium.',
-      'The Sun\'s light takes 8 minutes and 20 seconds to reach us.',
+      "The Sun's light takes 8 minutes and 20 seconds to reach us.",
     ],
   },
   {
@@ -226,7 +279,7 @@ export const SECTION_INFO = [
   {
     id: 'venus',
     title: 'Venus',
-    subtitle: 'Earth\'s Toxic Twin',
+    subtitle: "Earth's Toxic Twin",
     lines: [
       'Shrouded in thick clouds of sulfuric acid.',
       'The surface is hot enough to melt lead at 462°C.',
@@ -259,8 +312,8 @@ export const SECTION_INFO = [
     subtitle: 'King of the Planets',
     lines: [
       'The Great Red Spot is a storm that has raged for centuries.',
-      'Jupiter\'s moon Europa may harbor a subsurface ocean with life.',
-      'Its magnetic field is 20,000 times stronger than Earth\'s.',
+      "Jupiter's moon Europa may harbor a subsurface ocean with life.",
+      "Jupiter's magnetic field is 20,000 times stronger than Earth's.",
     ],
   },
   {

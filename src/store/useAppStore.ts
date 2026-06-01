@@ -7,6 +7,8 @@ interface AppState {
   setPhase: (phase: AppPhase) => void
   scrollProgress: number
   setScrollProgress: (progress: number) => void
+  hoveredPlanet: string | null
+  setHoveredPlanet: (id: string | null) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -14,4 +16,6 @@ export const useAppStore = create<AppState>((set) => ({
   setPhase: (phase) => set({ phase }),
   scrollProgress: 0,
   setScrollProgress: (progress) => set({ scrollProgress: progress }),
+  hoveredPlanet: null,
+  setHoveredPlanet: (id) => set({ hoveredPlanet: id }),
 }))
