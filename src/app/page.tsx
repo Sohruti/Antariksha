@@ -4,12 +4,16 @@ import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '@/store/useAppStore'
+import { useScrollManager } from '@/hooks/useScrollManager'
 import { IntroOverlay } from '@/components/IntroOverlay'
-import ScrollSections from '@/components/ScrollSections'
-import { NavigationSidebar, MobileJumpButton } from '@/components/NavigationSidebar'
-import { useSmoothScroll } from '@/hooks/useSmoothScroll'
+import { NavigationBar } from '@/components/ui/NavigationBar'
+import { BottomInfoBar } from '@/components/ui/BottomInfoBar'
+import { PlanetInfoPanel } from '@/components/ui/PlanetInfoPanel'
+import { PlanetModal } from '@/components/ui/PlanetModal'
+import { EducationalPanel } from '@/components/ui/EducationalPanel'
+import { ScrollProgress } from '@/components/ui/ScrollProgress'
 
-const CosmicJourney = dynamic(() => import('@/components/CosmicJourney'), {
+const SolarScene = dynamic(() => import('@/components/scene/SolarScene'), {
   ssr: false,
 })
 
@@ -35,16 +39,19 @@ function IntroPage() {
 }
 
 function ExplorePage() {
-  const containerRef = useRef<HTMLDivElement>(null!)
-  useSmoothScroll()
+  const wrapperRef = useRef<HTMLDivElement>(null!)
+  const contentRef = useRef<HTMLDivElement>(null!)
+  useScrollManager(wrapperRef, contentRef)
   const scrollToTarget = useAppStore((s) => s.scrollToTarget)
   const clearScrollTarget = useAppStore((s) => s.clearScrollTarget)
+  const focusedPlanet = useAppStore((s) => s.focusedPlanet)
+  const setFocusedPlanet = useAppStore((s) => s.setFocusedPlanet)
 
   useEffect(() => {
-    if (scrollToTarget === null || !containerRef.current) return
-    const container = containerRef.current
-    const target = scrollToTarget * container.scrollHeight
-    const startTop = container.scrollTop
+    if (scrollToTarget === null || !wrapperRef.current) return
+    const wrapper = wrapperRef.current
+    const target = scrollToTarget * wrapper.scrollHeight
+    const startTop = wrapper.scrollTop
     const distance = target - startTop
     if (Math.abs(distance) < 1) {
       clearScrollTarget()
@@ -56,7 +63,7 @@ function ExplorePage() {
     function step(now: number) {
       const t = Math.min(1, (now - startTime) / duration)
       const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
-      container.scrollTop = startTop + distance * eased
+      wrapper.scrollTop = startTop + distance * eased
       if (t < 1) {
         raf = requestAnimationFrame(step)
       } else {
@@ -67,25 +74,39 @@ function ExplorePage() {
     return () => cancelAnimationFrame(raf)
   }, [scrollToTarget, clearScrollTarget])
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && focusedPlanet) {
+        setFocusedPlanet(null)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [focusedPlanet, setFocusedPlanet])
+
   return (
     <motion.main
       key="exploring"
-      ref={containerRef}
-      className="h-screen overflow-y-scroll bg-[#020010]"
+      ref={wrapperRef}
+      className="h-screen bg-[#020010]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 1.5, ease: 'easeInOut' } }}
       style={{ overscrollBehavior: 'none' }}
     >
-      <div className="fixed inset-0 z-0">
-        <CosmicJourney />
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <SolarScene />
       </div>
 
-      <div className="relative z-10">
-        <ScrollSections />
+      <div ref={contentRef}>
+        <div className="relative z-10" style={{ height: '900vh' }} />
       </div>
 
-      <NavigationSidebar />
-      <MobileJumpButton />
+      <NavigationBar />
+      <BottomInfoBar />
+      <PlanetInfoPanel />
+      <EducationalPanel />
+      <ScrollProgress />
+      <PlanetModal />
     </motion.main>
   )
 }

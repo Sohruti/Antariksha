@@ -13,17 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ANTARIKSHA — Journey Through The Cosmos",
+  title: "ANTARIKSH.A — Solar System Explorer",
   description:
-    "An immersive cinematic space exploration experience. Travel from Earth to the edges of the observable universe.",
+    "An immersive cinematic solar system exploration experience. Travel from the Sun to Neptune through premium 3D visuals.",
   keywords: [
-    "space",
-    "universe",
-    "cosmos",
-    "exploration",
-    "cinematic",
-    "3D",
-    "interactive",
+    "space", "solar system", "3D", "interactive", "education",
+    "planets", "cinematic", "exploration",
   ],
 };
 
